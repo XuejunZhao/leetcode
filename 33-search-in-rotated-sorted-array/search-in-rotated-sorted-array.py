@@ -9,14 +9,13 @@ class Solution:
                 return mid
             else:
                 if nums[mid]>=nums[l]:
-                    if target < nums[mid] and target >= nums[l]:
+                    if target <= nums[mid] and target >= nums[l]:
                         r = mid - 1
                     else: 
                         l = mid + 1
                 else:
-                    if target > nums[mid] and target <= nums[r]:
-                        l = mid + 1
-                        
+                    if target >= nums[mid] and target <= nums[r]:
+                        l = mid + 1  
                     else: 
                         r = mid - 1
            
