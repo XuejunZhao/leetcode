@@ -1,56 +1,49 @@
 class Solution(object):
-    def __init(self):
-        self.used_3sum = []
-        
+    def kSum(self, nums, target, k_size):
+        n = len(nums)
+        l = 0 
+        r = n - 1
+        res = []
+        if k_size == 2:
+            while l < r: 
+                if nums[l] + nums[r] == target: 
+                    res.append([nums[l],nums[r]])
+                    pre_l, post_r = l, r
+                    l += 1
+                    r -= 1
+                    while l < r and nums[l] == nums[pre_l]: 
+                        l += 1
+                    while l < r and nums[r] == nums[post_r]: 
+                        r -= 1
+                elif nums[l] + nums[r] > target:
+                    r -= 1
+                else: 
+                    l += 1
+            return res 
+        elif k_size == 3: 
+            for i, num in enumerate(nums):
+                if i >= n - 2 or (i > 0 and num == nums[i-1]): continue
+                twosum_res = self.kSum(nums[i+1:],target-num,2)
+                if len(twosum_res) ==0: continue
+                for twosum in twosum_res: 
+                    res.append([nums[i]]+twosum)
+            return res
+        elif k_size == 4: 
+            for i, num in enumerate(nums):
+                if i >= n - 3 or (i > 0 and num == nums[i-1]): continue
+                threesum_res = self.kSum(nums[i+1:],target-num,3)
+                if len(threesum_res) ==0: continue
+                for threesum in threesum_res: 
+                    res.append([nums[i]]+threesum)
+            return res
+
+
     def fourSum(self, nums, target):
         """
         :type nums: List[int]
-        :type target: int
         :rtype: List[List[int]]
         """
         nums.sort()
-        return self.nSumTarget(nums, 4, 0, target)
-    def nSumTarget(self, nums, n, start, target): 
-        l_nums = len(nums)
-        res = []
-        
-        if n < 2 or l_nums < n:
-            return res
-        if n == 2: 
-            lo = start 
-            hi = l_nums - 1
-            while lo < hi:
-                tot = nums[lo] + nums[hi]
-                left, right = nums[lo], nums[hi]
-                if tot < target:
-                    while lo < hi and nums[lo] == left:
-                        lo += 1
-                elif tot > target:
-                    while lo < hi and nums[hi] == right:
-                        hi -= 1
-                else:
-                    res.append([left, right])
-                    
-                    while lo < hi and nums[lo] == left:
-                        lo += 1
-                    while lo < hi and nums[hi] == right:
-                        hi -= 1
-                        
-        else: 
+        res = self.kSum(nums, target, 4)
             
-            for i in range(start, l_nums):
-                # print (i, n)
-                if i > start and i < l_nums -1 and nums[i] == nums[i - 1]:
-                    continue
-                sub = self.nSumTarget(nums, n - 1, i + 1, target - nums[i])
-                
-                for arr in sub:
-                    # print (sub)
-                    arr.append(nums[i])
-                    res.append(arr)
-                   
-                
-                
-                    
-                
         return res
