@@ -20,22 +20,15 @@ class Solution(object):
                 else: 
                     l += 1
             return res 
-        elif k_size == 3: 
+        elif k_size >= 3: 
             for i, num in enumerate(nums):
-                if i >= n - 2 or (i > 0 and num == nums[i-1]): continue
-                twosum_res = self.kSum(nums[i+1:],target-num,2)
-                if len(twosum_res) ==0: continue
-                for twosum in twosum_res: 
-                    res.append([nums[i]]+twosum)
+                if i >= n - k_size+1 or (i > 0 and num == nums[i-1]): continue
+                sub_res = self.kSum(nums[i+1:],target-num,k_size-1)
+                if len(sub_res) ==0: continue
+                for sub_sum in sub_res: 
+                    res.append([nums[i]]+sub_sum)
             return res
-        elif k_size == 4: 
-            for i, num in enumerate(nums):
-                if i >= n - 3 or (i > 0 and num == nums[i-1]): continue
-                threesum_res = self.kSum(nums[i+1:],target-num,3)
-                if len(threesum_res) ==0: continue
-                for threesum in threesum_res: 
-                    res.append([nums[i]]+threesum)
-            return res
+        
 
 
     def fourSum(self, nums, target):
