@@ -7,12 +7,9 @@ class Solution(object):
         """
         pq = []
         for i, num in enumerate(nums):
-            if len(pq) < k: 
-                heapq.heappush(pq, num)
-            else: 
+            heapq.heappush(pq, num)
+            if len(pq) > k: 
+                
                 head = heapq.heappop(pq)
-                if num >= head:
-                    heapq.heappush(pq, num)
-                else:
-                    heapq.heappush(pq, head)
+                
         return pq[0]
