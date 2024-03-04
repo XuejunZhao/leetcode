@@ -46,16 +46,30 @@ class Solution(object):
         elif n == 1: 
             return lists[0]
 
-        # print (n/2)
-        merged_lists = []
-        for i in range(n/2):
-            if len(lists) >= 2: 
-                l = lists.pop(0)
-                r = lists.pop(0)
-                merged_lists.append(self.mergeTwoLists(l, r))
+        # merged_lists = []
+        # for i in range(n/2):
+        #     if len(lists) >= 2: 
+        #         l = lists.pop(0)
+        #         r = lists.pop(0)
+        #         merged_lists.append(self.mergeTwoLists(l, r))
 
-        if len(lists) > 0: 
-            merged_lists.append(lists.pop(0))
-        # print (merged_lists)
-        return self.mergeKLists(merged_lists)
+        # if len(lists) > 0: 
+        #     merged_lists.append(lists.pop(0))
+        # return self.mergeKLists(merged_lists)
+
+        dummy = ListNode(-1)
+        p = dummy 
+        pq = []
+        for head in lists: 
+            if head: 
+                heapq.heappush(pq, (head.val, id(head), head))
+        while pq: 
+            node = heapq.heappop(pq)[2]
+            p.next = node 
+            if node.next: 
+                heapq.heappush(pq, (node.next.val, id(node.next), node.next))
+            p = p.next 
+        return dummy.next
+
+
         
