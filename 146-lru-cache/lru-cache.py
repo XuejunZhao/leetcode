@@ -7,76 +7,63 @@ class LRUCache:
             self.next = next 
 
     def __init__(self, capacity: int):
-        self.cap = capacity
-        self.tb = dict()
-        # delete the head: most recently used
-        self.Head = None 
-        # new add to tail
-        self.Tail = None 
+        self.cap = capacity 
+        self.dict = dict()
+        self.head = None
+        self.tail = None
   
     def addNode(self, key, value):
         node = self.LinkNode(key, value)
-        self.tb[key]=node
-        if not self.Tail: 
-            self.Head = node 
-            self.Tail = node 
-        else:
-            self.Tail.next = node
-            node.prev = self.Tail
-            self.Tail = node
+        if not self.head: 
+            self.head = node 
+            self.tail = node 
+        else: 
+            self.tail.next = node 
+            node.prev = self.tail 
+            self.tail = node 
+        self.dict[key] = node 
 
     def deleteNode(self, key):
-        node = self.tb[key]
-        del self.tb[key]
-        if node == self.Tail: 
-            self.Tail = node.prev
-        if node == self.Head:
-            self.Head = node.next 
+        node = self.dict[key]
+        if node == self.head:
+            self.head = self.head.next 
+        if node == self.tail: 
+            self.tail = self.tail.prev
+        
+        if node.prev: 
+            node.prev.next = node.next
         if node.next: 
             node.next.prev = node.prev
-        if node.prev: 
-            node.prev.next = node.next 
-        
+        del self.dict[key]
         
     def popNode(self):
-        node = self.Head
-        key = node.key
-        del self.tb[key]
-        # print (key)
-        # print (self.Tail.key)
-        if node == self.Tail: 
-            self.Tail = None 
-            self.Head = None
-        else:
-            self.Head = node.next
-            if node.next: 
-                self.Head.prev = None
-            print (self.Head.key)
-    
+        node = self.head 
+        if self.tail == self.head: 
+            self.tail = self.tail.prev
+        del self.dict[node.key]
+        self.head = self.head.next 
+        
     def get(self, key: int) -> int:
-        if key in self.tb.keys(): 
-            node = self.tb[key]
-            self.deleteNode(key)
+        if key in self.dict.keys():
+            node = self.dict[key]
             value = node.val
+            self.deleteNode(key)
             self.addNode(key, value)
             return value
         else: 
             return -1
+        
 
     def put(self, key: int, value: int) -> None:
-        # print (key)
-        # print (self.tb.keys())
-        if key not in self.tb.keys() and len(self.tb) < self.cap : 
-            self.addNode(key, value)
-        elif key not in self.tb.keys() and len(self.tb) >= self.cap : 
-            self.popNode()
-            self.addNode(key, value)
-        else: 
-            node = self.tb[key]
+        if key in self.dict.keys():
+            node = self.dict[key]
             self.deleteNode(key)
             self.addNode(key, value)
-        # print (self.tb.keys())
-
+        else: 
+            self.addNode(key, value)
+        if len(self.dict) > self.cap: 
+            self.popNode()
+        
 
 
 
