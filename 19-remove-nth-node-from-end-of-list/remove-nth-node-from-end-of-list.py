@@ -10,27 +10,28 @@ class Solution(object):
         :type n: int
         :rtype: ListNode
         """
-        pre_n = None 
-        curr_n = head 
-        step = n + 1
-        while step and curr_n: 
-            curr_n = curr_n.next
-            step -= 1
-        
-        if step > 1 and not curr_n: 
+        l = None 
+        r = head 
+        gap = n + 1
+        while gap and r: 
+            
+            r = r.next 
+            gap -= 1
+        # if not r: return head
+        if gap > 1 and not r: 
             return None 
-        elif step == 1 and not curr_n: 
+        elif gap == 1 and not r: 
             return head.next
-        
         else:
-            pre_n = head 
-            while curr_n: 
-                pre_n = pre_n.next 
-                curr_n = curr_n.next 
-            tmp = pre_n.next  
-            pre_n.next = tmp.next 
-            # else: pre_n.next = None
+            l = head
+            while r:
+                l = l.next
+                r = r.next 
+        
+            l_next = l.next
+            l.next = l_next.next 
         return head
+
 
 
                 
