@@ -9,7 +9,5 @@ class Solution(object):
         for i, num in enumerate(nums):
             heapq.heappush(pq, num)
             if len(pq) > k: 
-                
-                head = heapq.heappop(pq)
-                
+                heapq.heappop(pq)
         return pq[0]
