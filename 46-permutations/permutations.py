@@ -1,12 +1,19 @@
-class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
+class Solution(object):
+    def permute(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
         n = len(nums)
-        if n <= 1: 
+        if n == 0: 
+            return [[]]
+        elif n == 1: 
             return [nums]
         res = []
-        for i,num in enumerate(nums):
+        for i, num in enumerate(nums):
             permutations = self.permute(nums[:i]+nums[i+1:])
             for p in permutations:
-                res.append(p+[num])
+                res.append([num]+p)
         return res
+
         
