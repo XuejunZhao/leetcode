@@ -1,9 +1,9 @@
 # Definition for singly-linked list.
-# class ListNode(object):
+# class ListNode:
 #     def __init__(self, val=0, next=None):
 #         self.val = val
 #         self.next = next
-class Solution(object):
+class Solution:
     def addNode(self, head, tail, node):
         node.next = None
         if not head: 
@@ -14,38 +14,26 @@ class Solution(object):
             tail = node 
         return head, tail
 
-    def partition(self, head, x):
-        """
-        :type head: ListNode
-        :type x: int
-        :rtype: ListNode
-        """
+    def partition(self, head: Optional[ListNode], x: int) -> Optional[ListNode]:
         if not head: return head 
         l_head = None 
         l_tail = None 
         l = None 
         r = head 
         while r: 
-            
             if r.val >= x: 
                 l = r 
                 r = r.next 
             else: 
-                node = r 
-                node_next = node.next
-                if l:
-                    l.next = node_next
+                node_next = r.next 
+                if l: 
+                    l.next = node_next 
                 else: 
                     head = node_next 
-                l_head, l_tail = self.addNode(l_head, l_tail, node)
+                l_head, l_tail = self.addNode(l_head, l_tail, r)
                 r = node_next
-        # print (l_tail)
-        # print (l_head)
         if l_head:
             l_tail.next = head 
             return l_head 
         else: 
             return head
-
-
-            
