@@ -1,26 +1,20 @@
 class Solution:
     def __init__(self):
-        self.res =[]
-        self.track = []
-        self.target = float('inf')
-
-    def backtrack(self, candidates, last):
-        if sum(self.track) == self.target:
-            self.res.append(self.track[:])
-        elif sum(self.track) > self.target:
-            return
-        else:
-            for i,c in enumerate(candidates):
-                if c == last:
-                    continue
-                self.track.append(c)
-                self.backtrack(candidates[i+1:], last)
-                self.track.pop(-1)
-                last = c
+        self.res = []
+    def backtrack(self, last, candidates,target,tot):
+        if sum(tot) == target: 
+            self.res.append(tot[:])
+        elif sum(tot) > target:
+            return 
+        for i,c in enumerate(candidates):
+            if c == last: continue
+            tot.append(c)
+            self.backtrack(last, candidates[i+1:], target, tot)
+            tot.pop(-1)
+            last = c
+        return 
 
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         candidates.sort()
-        self.target  = target
-
-        self.backtrack(candidates, float('inf'))
+        self.backtrack(float('inf'), candidates,target,[])
         return self.res
