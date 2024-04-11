@@ -1,68 +1,61 @@
-class Doublelist:
-    def __init__(self, key, val):
+class LinkedNode:
+    def __init__(self,key, val, prev=None,next=None):
         self.key = key 
         self.val = val 
-        self.next = None
-        self.prev = None
-    
+        self.prev = prev
+        self.next = next 
+
 class LRUCache:
     def __init__(self, capacity: int):
-        self.capacity = capacity
+        self.cap = capacity
+        self.head = None 
+        self.tail = None 
         self.dict = {}
-        self.head = None
-        self.tail = None
-    
-    def add_node(self, key, val):
-        added_node = Doublelist(key, val)
-        if not self.head: 
-            self.head = added_node 
-            self.tail = added_node
-        else: 
-            self.tail.next = added_node
-            added_node.prev = self.tail
-            self.tail = added_node
-        self.dict[key] = added_node
-
-    def delete_node(self, key):
-        deleted_node = self.dict[key]
-        if deleted_node.next:
-            deleted_node.next.prev = deleted_node.prev
+    def delete(self, node):
+        # delete node in linkedList 
+        del self.dict[node.key]
+        if node == self.head: 
+            self.head = node.next 
+            # self.head.prev = None 
+        if node == self.tail: 
+            self.tail = node.prev
+            # self.tail.next = None 
+        if node.prev and node.next: 
+            node.next.prev = node.prev
+            node.prev.next = node.next
+        elif node.prev and not node.next: 
+            node.prev.next = None
+        elif not node.prev and node.next: 
+            node.next.prev = None
         
-        if deleted_node.prev:
-            deleted_node.prev.next = deleted_node.next
-        if deleted_node == self.tail: 
-            self.tail = deleted_node.prev
-        if deleted_node == self.head: 
-            self.head = deleted_node.next 
-            
-        del self.dict[key]
 
     def get(self, key: int) -> int:
-        if key in self.dict: 
-            val = self.dict[key].val
-            self.delete_node(key)
-            self.add_node(key,val)
-            return val
+        if key not in self.dict.keys():
+            return -1
         else: 
-            return -1 
-        
+            node = self.dict[key]
+            val = node.val
+            self.delete(node)
+            self.put(key,val)
+            return val
+                
     def put(self, key: int, value: int) -> None:
-        if key in self.dict: 
-            # val = self.dict[key].val
-            self.delete_node(key)
+        if key in self.dict.keys():
+            node = self.dict[key]
+            self.delete(node)
+        node = LinkedNode(key,value)
+        if not self.tail: 
+            self.head = node 
+        else: 
+            self.tail.next = node
+            node.prev = self.tail 
+        self.tail = node 
+        self.dict[key]= node
         
-        self.add_node(key,value)
-        if len(self.dict) > self.capacity:
-            node = self.head 
-            if self.tail == self.head:
-                self.tail = self.tail.prev
-            del self.dict[node.key]
-            self.head = self.head.next
 
+        if self.cap < len(self.dict):
+            self.delete(self.head)
 
-        
-            
-        
 
 
 # Your LRUCache object will be instantiated and called as such:
